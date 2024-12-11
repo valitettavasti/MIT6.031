@@ -126,14 +126,46 @@ public class TurtleSoup {
      */
     public static void drawPersonalArt(Turtle turtle) {
         //throw new RuntimeException("implement me!");
-        int sideLength = 30;
-        for(int i = 0;i<6;i++){
-            turtle.forward(sideLength);
+        int sideLength = 3;
+        kochSnowFlake(turtle, sideLength, 3);
+        turtle.turn(120);
+        kochSnowFlake(turtle, sideLength, 3);
+        turtle.turn(120);
+        kochSnowFlake(turtle, sideLength, 3);
+    }
+
+    /**
+     * The function is used to draw Kohler snowflakes.
+     * The Koch snowflake (also known as the Koch curve, Koch star, or Koch island) is a fractal
+     * curve and one of the earliest fractals to have been described. It is based on the Koch curve,
+     * which appeared in a 1904 paper titled "On a Continuous Curve Without Tangents, Constructible from
+     * Elementary Geometry" by the Swedish mathematician Helge von Koch.
+     *
+     * HINT: look at https://en.wikipedia.org/wiki/Koch_snowflake
+     *
+     * @param turtle the turtle context
+     * @param sideLength length of each side
+     * @param recursionsNumber the number of recursions.It is used to control the number of Kohler
+     * snowflake cycles.
+     * */
+    public static void kochSnowFlake(Turtle turtle, int sideLength, int recursionsNumber){
+        if(recursionsNumber != 0){
+            recursionsNumber--;
+            kochSnowFlake(turtle, sideLength,recursionsNumber);
             turtle.turn(-60);
+            kochSnowFlake(turtle, sideLength,recursionsNumber);
+            turtle.turn(120);
+            kochSnowFlake(turtle, sideLength,recursionsNumber);
+            turtle.turn(-60);
+            kochSnowFlake(turtle, sideLength,recursionsNumber);
+        }else{
+            turtle.forward(sideLength);
+           turtle.turn(-60);
             turtle.forward(sideLength);
             turtle.turn(120);
             turtle.forward(sideLength);
             turtle.turn(-60);
+            turtle.forward(sideLength);
         }
     }
 
