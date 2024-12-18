@@ -21,10 +21,15 @@ public class ExtractTest {
     
     private static final Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
     private static final Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
+    private static final Instant d3 = Instant.parse("2016-02-18T11:00:00Z");
+    private static final Instant d4 = Instant.parse("2017-02-17T11:00:00Z");
+
     
     private static final Tweet tweet1 = new Tweet(1, "alyssa", "is it reasonable to talk about rivest so much?", d1);
     private static final Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
-    
+    private static final Tweet tweet3 = new Tweet(3, "abcde", "11111 @abc", d3);
+    private static final Tweet tweet4 = new Tweet(4, "abcdsde", "11111 @Abcde", d4);
+
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
         assert false; // make sure assertions are enabled with VM argument: -ea
@@ -43,6 +48,27 @@ public class ExtractTest {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet1));
         
         assertTrue("expected empty set", mentionedUsers.isEmpty());
+    }
+
+    @Test
+    public void testGetTimespanTweets() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2, tweet3, tweet4));
+
+        assertEquals("expected start", d1, timespan.getStart());
+        assertEquals("expected end", d4, timespan.getEnd());
+    }
+
+    @Test
+    public void testGetMentionedUsers() {
+        Set<String> mentionedUsers1 = Extract.getMentionedUsers(Arrays.asList(tweet1, tweet2,tweet3));
+
+        assertTrue(mentionedUsers1.contains("abc"));
+        assertFalse(mentionedUsers1.contains("abcde"));
+
+        Set<String> mentionedUsers2 = Extract.getMentionedUsers(Arrays.asList(tweet4, tweet2,tweet3));
+
+        assertTrue(mentionedUsers2.contains("abc"));
+        assertTrue(mentionedUsers2.contains("abcde"));
     }
 
     /*

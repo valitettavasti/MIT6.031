@@ -3,6 +3,9 @@
  */
 package twitter;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +27,20 @@ public class Extract {
      *         every tweet in the list.
      */
     public static Timespan getTimespan(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Instant start =Instant.MAX;
+        Instant end = Instant.MIN;
+        for(int i = 0; i<tweets.size(); i++){
+            if (Duration.between(tweets.get(i).getTimestamp(),start).toMinutes()>0){
+                start = tweets.get(i).getTimestamp();
+            }
+            if (Duration.between(end,tweets.get(i).getTimestamp()).toMinutes()>0){
+                end = tweets.get(i).getTimestamp();
+            }
+        }
+        return new Timespan(start, end);
+        //Instant start = tweets.stream().map(Tweet::getTimestamp).min(Instant::compareTo).get();   //AI教的方法
+        //Instant end = tweets.stream().map(Tweet::getTimestamp).max(Instant::compareTo).get();
+        //return new Timespan(start, end);
     }
 
     /**
@@ -43,7 +59,17 @@ public class Extract {
      *         include a username at most once.
      */
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Set<String> mentionedUsers = new HashSet<>();
+        for(Tweet tweet:tweets){
+            String[] words = tweet.getText().split(" ");
+            for(String word:words){
+                if(word.charAt(0) == '@'){
+                    word = word.substring(1);
+                    mentionedUsers.add(Character.toLowerCase(word.charAt(0))+word.substring(1));
+                }
+            }
+        }
+        return mentionedUsers;
     }
 
 }

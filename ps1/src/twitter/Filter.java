@@ -3,7 +3,9 @@
  */
 package twitter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Filter consists of methods that filter a list of tweets for those matching a
@@ -27,7 +29,16 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> writtenName = new ArrayList<>();
+        String usernameLower = Character.toLowerCase(username.charAt(0)) + username.substring(1);
+        for(Tweet tweet:tweets){
+            String name = tweet.getAuthor();
+            name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
+            if(name.equals(usernameLower)){
+                writtenName.add(tweet);
+            }
+        }
+        return writtenName;
     }
 
     /**
@@ -41,7 +52,14 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> inTineSpanTweets = new ArrayList<>();
+        for(Tweet tweet:tweets){
+            if(tweet.getTimestamp().compareTo(timespan.getStart())>=0 &&
+                    tweet.getTimestamp().compareTo(timespan.getEnd())<=0){
+                inTineSpanTweets.add(tweet);
+            }
+        }
+        return inTineSpanTweets;
     }
 
     /**
@@ -60,7 +78,20 @@ public class Filter {
      *         same order as in the input list.
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> containingTweet = new ArrayList<>();
+        List<String> lowerCaseWords = words.stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+        for(Tweet tweet:tweets){
+            String text = tweet.getText().toLowerCase();
+            for(String word:lowerCaseWords){
+                if(text.contains(word)){
+                    containingTweet.add(tweet);
+                    break;
+                }
+            }
+        }
+        return containingTweet;
     }
 
 }
