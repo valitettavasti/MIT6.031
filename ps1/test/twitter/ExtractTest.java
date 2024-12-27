@@ -60,12 +60,12 @@ public class ExtractTest {
 
     @Test
     public void testGetMentionedUsers() {
-        Set<String> mentionedUsers1 = Extract.getMentionedUsers(Arrays.asList(tweet1, tweet2,tweet3));
+        Set<String> mentionedUsers1 = Extract.getMentionedUsers(Arrays.asList(tweet1, tweet2, tweet3));
 
         assertTrue(mentionedUsers1.contains("abc"));
         assertFalse(mentionedUsers1.contains("abcde"));
 
-        Set<String> mentionedUsers2 = Extract.getMentionedUsers(Arrays.asList(tweet4, tweet2,tweet3));
+        Set<String> mentionedUsers2 = Extract.getMentionedUsers(Arrays.asList(tweet4, tweet2, tweet3));
 
         assertTrue(mentionedUsers2.contains("abc"));
         assertTrue(mentionedUsers2.contains("abcde"));

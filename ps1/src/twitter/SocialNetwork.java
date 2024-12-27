@@ -3,9 +3,8 @@
  */
 package twitter;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * SocialNetwork provides methods that operate on a social network.
@@ -41,7 +40,17 @@ public class SocialNetwork {
      *         either authors or @-mentions in the list of tweets.
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        //throw new RuntimeException("not implemented");
+        Map<String, Set<String>> graph = new HashMap<>();
+        for(Tweet tweet:tweets){
+            Set<String> mentionedUsers = Extract.getMentionedUsers(tweets);
+            String authorName = Character.toLowerCase(tweet.getAuthor().charAt(0))+tweet.getAuthor().substring(1);
+            mentionedUsers.remove(authorName);      // Make sure that he or she didn't get mention themselves.
+            if (!mentionedUsers.isEmpty()){
+                graph.put(authorName, mentionedUsers);
+            }
+        }
+        return graph;
     }
 
     /**
@@ -54,7 +63,12 @@ public class SocialNetwork {
      *         descending order of follower count.
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
-        throw new RuntimeException("not implemented");
+        //throw new RuntimeException("not implemented");
+        return followsGraph.entrySet().stream()
+                // 指定Comparator.reverseOrder()是针对Set<String>类型的
+                .sorted(Comparator.comparingInt(Map.Entry::getValue).reversed())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
 }
